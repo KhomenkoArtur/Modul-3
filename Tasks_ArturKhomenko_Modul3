@@ -1,0 +1,198 @@
+Use Artur_Khomenko_Modul3
+
+go
+
+-----------task 1
+SELECT * FROM suppliers ;
+
+-- update all rows where rating < 20
+UPDATE suppliers
+SET rating = rating + 10 
+WHERE rating < 20
+
+--turn back
+UPDATE suppliers
+SET rating = 10
+WHERE suppliersid = 2
+
+
+-------------task 2
+Select p.productid, p.name, p.city
+	into new_table
+		from products as p join supplies as s ON p.productid = s.productid
+			join suppliers as sr ON s.suppliersid = sr.suppliersid
+				join details as d ON s.detailid = d.detailid
+					where p.city = 'London' and sr.city = 'London'
+
+Select * from new_table
+Drop Table new_table 
+
+
+------------task 3
+
+
+SELECT * FROM products
+
+Delete from products
+Where Not EXISTS (Select quantity
+					from supplies
+						where quantity != 0 )
+
+
+-----------------------------------------task 4
+
+
+Select distinct s1.suppliersid, s1.detailid,s2.detailid
+	from supplies as s1 join supplies as s2 ON s1.suppliersid = s2.suppliersid
+		Where s1.productid != s2.productid 
+			
+
+
+-----------task 5
+SELECT * FROM supplies
+	
+	UPDATE supplies
+		SET quantity = quantity * 1.1
+			Where detailid in ( Select detailid
+									from details
+										where color ='Red')
+		
+			
+-----------task 6
+
+
+Drop table if EXISTS new_table2
+
+Select DISTINCT color, city
+	INTO new_table2
+		from details
+
+Select * from new_table2
+
+
+
+-----------task 7 
+
+
+Drop table if EXISTS new_table3
+
+Select DISTINCT d.detailid, d.name
+	INTO new_table3
+		from details as d join supplies as s ON d.detailid = s.detailid
+			join suppliers as sr ON sr.suppliersid = s.suppliersid 
+				join products as p ON s.productid = p.productid
+					Where sr.city = 'London' or p.city = 'London'
+						
+
+Select * from new_table3
+
+----task 8
+
+
+Delete from suppliers
+Where suppliersid = 10
+
+Insert into suppliers (suppliersid, name, rating, city)
+Values(10,'White',NULL,'NewYork')
+
+SELECT * FROM suppliers 
+
+
+
+-----------task 9
+
+
+SELECT * FROM supplies
+SELECT * FROM products
+
+Delete from products
+Where city = 'Roma'
+
+Delete from supplies
+	from  supplies as s join details as d ON s.detailid = d.detailid
+		Where city = 'Roma'
+
+
+--------------task 10
+
+Select city 
+	from suppliers
+			
+UNION
+
+Select city 
+	from details
+		
+			
+UNION
+
+ Select city 
+	from products
+			Order by city
+
+
+------------task 11
+
+
+Select detailid, color, weight,
+	Case color
+		When 'Red' Then 'Yellow'
+	End	as case_color
+from details
+	Where weight < 15
+
+SELECT * FROM details
+
+
+
+--------------task 12
+
+
+Select productid,city 
+	from products
+		Where city like'_o%'
+
+
+
+-------task 13
+
+
+SELECT * FROM suppliers
+SELECT * FROM supplies
+
+Update suppliers
+Set rating = rating + 10
+	Where suppliersid in ( Select suppliersid
+							from supplies
+								where quantity > ( select AVG(quantity)
+													from supplies)
+							)
+							
+
+
+
+------------task 14
+
+Drop table if exists new_table4
+
+Select sr.suppliersid, name
+	 into new_table4
+		from suppliers as sr join supplies as s ON sr.suppliersid= s.suppliersid
+			Where s.detailid = 1
+				Order by  sr.suppliersid, name
+
+Select * from new_table4
+
+
+----------task 15
+
+Delete from suppliers
+Where suppliersid = 20 or suppliersid = 30
+
+Insert into suppliers(suppliersid,name,rating,city)
+Values
+(20,'Artur',100,'Lviv'),
+(30,'Andriy',1,'lviv')
+	
+
+Select * from suppliers	 
