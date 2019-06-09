@@ -1,0 +1,49 @@
+USE Artur_Khomenko_Modul3;
+
+go
+----------task 1
+
+
+DROP table  IF EXISTS  #tmp_Details
+
+go
+
+CREATE table #tmp_Details
+(
+	detailid integer,
+	name varchar(20),
+	color varchar(20),
+	weight integer,
+	city varchar (20)
+)
+
+go
+
+INSERT INTO #tmp_Details(detailid,name,color,weight,city )
+VALUES
+(1,'Screw','Blue',13,'Osaka'),
+(2,'Bolt','Pink',12,'Tokio'),
+(18,'Whell-24','Red',14,'Lviv'),
+(19,'Whell-28','Pink',15,'London')
+
+go
+
+	SELECT * FROM details
+	SELECT * FROM #tmp_Details
+
+---------task 2
+
+
+	MERGE details as d
+		USING (SELECT detailid,name,color,weight,city  FROM #tmp_Details
+				) as s (detailid,name,color,weight,city)
+					ON ( d.detailid = s.detailid)
+	WHEN MATCHED THEN
+		UPDATE SET	d.detailid = s.detailid,
+					d.name = s.name,
+					d.color = s.color,
+					d.weight = s.weight,
+					d.city = s.city
+	WHEN NOT MATCHED THEN
+		INSERT (detailid,name,color,weight,city) VALUES(s.detailid,s.name,s.color,s.weight,s.city) ;
+
